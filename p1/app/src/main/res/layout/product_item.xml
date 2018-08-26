@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="@dimen/list_img"
+            android:layout_height="@dimen/list_img"
+            android:layout_margin="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/add_product"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/product_name"
+            app:layout_constraintHorizontal_bias="0.039"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/default_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/product_type"
+            app:layout_constraintStart_toEndOf="@+id/product_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Camera" />
+
+        <TextView
+            android:id="@+id/product_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/small_text"
+            app:layout_constraintBottom_toTopOf="@id/product_price"
+            app:layout_constraintStart_toEndOf="@+id/product_image"
+            app:layout_constraintTop_toBottomOf="@id/product_name"
+            tools:text="Electronics" />
+
+        <TextView
+            android:id="@+id/product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/default_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/product_image"
+            app:layout_constraintTop_toBottomOf="@id/product_type"
+            tools:text="$25" />
+
+        <TextView
+            android:id="@+id/product_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/small_text"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ship_product"
+            tools:text="In stock(4pcs)" />
+
+
+        <ImageView
+            android:id="@+id/ship_product"
+            android:layout_width="@dimen/list_ship"
+            android:layout_height="@dimen/list_ship"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:contentDescription="@string/ship_product"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:src="@drawable/ic_add_shopping_cart"
+            app:layout_constraintBottom_toTopOf="@+id/product_quantity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
