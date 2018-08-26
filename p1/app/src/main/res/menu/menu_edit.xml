@@ -13,5 +13,10 @@
         android:icon="@drawable/ic_delete"
         android:title="@string/delete"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/call_supplier"
+        android:icon="@drawable/ic_call"
+        android:title="@string/call"
+        app:showAsAction="ifRoom" />
 
 </menu>

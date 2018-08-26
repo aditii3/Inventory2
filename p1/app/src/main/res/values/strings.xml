@@ -19,6 +19,9 @@
     <string name="start">Start</string>
     <string name="next">Next</string>
     <string name="skip">Skip</string>
+    <string name="increment_order">Increment</string>
+    <string name="decrement_order">Decrement</string>
+    <string name="call">Call</string>
     <string name="error_deleting">Error with deleting product</string>
     <string name="success_deleting">Product deleted</string>
     <string name="transition_img">transitionimage</string>

@@ -23,7 +23,8 @@
 
         <activity
             android:name=".ui.EditProductActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.MainActivity" />
         <activity
             android:name=".ui.IntroActivity"
             android:theme="@style/AppTheme.NoActionBar">

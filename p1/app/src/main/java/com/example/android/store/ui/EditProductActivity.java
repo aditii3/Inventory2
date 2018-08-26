@@ -90,13 +90,22 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             getWindow().setSharedElementEnterTransition(TransitionInflater.from(getApplicationContext()).inflateTransition(R.transition.shared));
 
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         currentUri = getIntent().getData();
         if (currentUri == null) {
             setTitle(getString(R.string.add_product));
             Glide.with(this).load(R.drawable.ic_menu_gallery).apply(RequestOptions.fitCenterTransform()).into(productImageEdit);
             invalidateOptionsMenu();
         } else {
+            productNameEt.setEnabled(false);
+            supplierNoEt.setEnabled(false);
+            productNameEt.setEnabled(false);
+            productQuantityEt.setEnabled(false);
+            productPriceEt.setEnabled(false);
+            supplierNameEt.setEnabled(false);
+            spinner.setEnabled(false);
             setTitle(getString(R.string.edit_product));
             getLoaderManager().initLoader(EXISTING_CONTENT_LOADER, null, this);
 
@@ -109,6 +118,32 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
     boolean setEditingToTrue() {
         productChanged = true;
         return false;
+    }
+
+    @OnClick(R.id.imageButton)
+    void addOne() {
+        String previousVal = productQuantityEt.getText().toString().trim();
+        if (previousVal.isEmpty()) {
+            return;
+        } else {
+            int previous = Integer.parseInt(previousVal);
+            productQuantityEt.setText(String.valueOf(++previous));
+            productChanged = true;
+        }
+    }
+
+    @OnClick(R.id.imageButton2)
+    void decreaseOne() {
+        String previousVal = productQuantityEt.getText().toString().trim();
+        if (previousVal.isEmpty()) {
+            return;
+        } else if (previousVal.equals("0")) {
+            return;
+        } else {
+            int previous = Integer.parseInt(previousVal);
+            productQuantityEt.setText(String.valueOf(--previous));
+            productChanged = true;
+        }
     }
 
     @Override
@@ -205,32 +240,33 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void saveProduct() {
-        String name = productNameEt.getText().toString().trim();
-        String quantity = productQuantityEt.getText().toString().trim();
-        String price = productPriceEt.getText().toString().trim();
-        String supplierNo = supplierNoEt.getText().toString().trim();
-        String supplieName = supplierNameEt.getText().toString().trim();
-
-
-        if (imageUri == null ||
-                TextUtils.isEmpty(name) ||
-                TextUtils.isEmpty(quantity) ||
-                TextUtils.isEmpty(price) ||
-                TextUtils.isEmpty(supplierNo) ||
-                TextUtils.isEmpty(supplieName)) {
-            Toast.makeText(this, "Enter all details to save product", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ContentValues cv = new ContentValues();
-        cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_NAME, name);
-        cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_IMAGE, imageUri.toString());
-        cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_PRICE, Integer.parseInt(price));
-        cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_QUANTITY, Integer.parseInt(quantity));
-        cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplieName);
-        cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NO, supplierNo);
-        cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_TYPE, productType);
-
         if (currentUri == null) {
+            String name = productNameEt.getText().toString().trim();
+            String quantity = productQuantityEt.getText().toString().trim();
+            String price = productPriceEt.getText().toString().trim();
+            String supplierNo = supplierNoEt.getText().toString().trim();
+            String supplieName = supplierNameEt.getText().toString().trim();
+
+
+            if (imageUri == null ||
+                    TextUtils.isEmpty(name) ||
+                    TextUtils.isEmpty(quantity) ||
+                    TextUtils.isEmpty(price) ||
+                    TextUtils.isEmpty(supplierNo) ||
+                    TextUtils.isEmpty(supplieName)) {
+                Toast.makeText(this, "Enter all details to save product", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ContentValues cv = new ContentValues();
+            cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_NAME, name);
+            cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_IMAGE, imageUri.toString());
+            cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_PRICE, Integer.parseInt(price));
+            cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_QUANTITY, Integer.parseInt(quantity));
+            cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplieName);
+            cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NO, supplierNo);
+            cv.put(StoreContract.StoreEntry.COLUMN_PRODUCT_TYPE, productType);
+
             Uri newUri = getContentResolver().insert(StoreContract.StoreEntry.CONTENT_URI, cv);
             if (newUri == null) {
                 Toast.makeText(this, "Error saving product", Toast.LENGTH_SHORT).show();
@@ -238,14 +274,20 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
                 Toast.makeText(this, "Product saved", Toast.LENGTH_SHORT).show();
             }
         } else {
+            ContentValues cv = new ContentValues();
+            String quantity = productQuantityEt.getText().toString();
+
+            cv.put(StoreEntry.COLUMN_PRODUCT_QUANTITY, Integer.parseInt(quantity));
             int rowsChanged = getContentResolver().update(currentUri, cv, null, null);
             if (rowsChanged == 0) {
                 Toast.makeText(this, "Error updating product", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Product saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Product updated", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -258,7 +300,9 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
         super.onPrepareOptionsMenu(menu);
         if (currentUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete_product_edit);
+            MenuItem call = menu.findItem(R.id.call_supplier);
             menuItem.setVisible(false);
+            call.setVisible(false);
         }
         return true;
     }
@@ -289,6 +333,9 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
                 return true;
             case R.id.action_delete_product_edit:
                 showDeleteConfirmationDialog();
+                return true;
+            case R.id.call_supplier:
+                callToOrder();
                 return true;
             case android.R.id.home:
                 if (!productChanged) {
@@ -343,6 +390,12 @@ public class EditProductActivity extends AppCompatActivity implements LoaderMana
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void callToOrder() {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + supplierNoEt.getText().toString().trim()));
+        startActivity(intent);
     }
 
     private void deleteProduct() {
